@@ -1,0 +1,45 @@
+buildscript {
+    ext { // 전역 변수 설정
+        springBootVersion = '2.1.7.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+    }
+}
+
+group 'io.github.x1111101101'
+version '0.0.1'
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web"
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    // 위 의존성들의 버전은 spring dependency-management 플러그인의 버전을 따라감(springBootVersion 전역 변수를 통해 설정함)
+    // -> 버전 관리 용이, 버전 충돌 회피
+
+}
+
+configurations.all {
+	resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+		println("details.requested.group")
+	}
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'io.github.x1111101101.Application'
+    }
+}
