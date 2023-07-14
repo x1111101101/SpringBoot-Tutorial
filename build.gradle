@@ -24,18 +24,24 @@ repositories {
     mavenCentral()
 }
 
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+		if (details.requested.group == 'org.apache.logging.log4j') {
+            println "->${details.requested}"
+		}
+	}
+}
+
 dependencies {
-    compile "org.springframework.boot:spring-boot-starter-web"
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude group: 'org.apache.logging.log4j'
+    }
     testCompile "org.springframework.boot:spring-boot-starter-test"
     // 위 의존성들의 버전은 spring dependency-management 플러그인의 버전을 따라감(springBootVersion 전역 변수를 통해 설정함)
     // -> 버전 관리 용이, 버전 충돌 회피
+    
+    
 
-}
-
-configurations.all {
-	resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-		println("details.requested.group")
-	}
 }
 
 jar {
